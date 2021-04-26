@@ -227,8 +227,8 @@ function initialize_threejs(data) {
 		// Create a line strip for all of the path coordinates.
 		var geometry = new THREE.Geometry();
 		// Color the line by its injection structure color.
-		var colorint = parseInt(lines[i]['structure-color'], 16);
-    // var colorint = blueColor;
+		// var colorint = parseInt(lines[i]['structure-color'], 16);
+    var colorint = blueColor;
 
 		if (!selected_indices0.includes(i)) { // paths that don't pass wall 0
     material = new THREE.LineBasicMaterial( { color: colorint, opacity: 1, linewidth: 1 } );
@@ -315,8 +315,8 @@ function initialize_threejs(data) {
 		scene.add( line );
 	}
 
-	// createPartialSphere(dst_x, dst_y, dst_z, radii, range_theta_phi);
-  // create000Sphere(200);
+	createPartialSphere(dst_x, dst_y, dst_z, radii, range_theta_phi);
+  create000Sphere(200);
 
 	animate();
 }
