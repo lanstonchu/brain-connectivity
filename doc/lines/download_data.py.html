@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>download_data.py</title>
+  <link rel="stylesheet" href="../../stylesheets/docco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div id="jump_to">
+    Jump To &hellip;
+    <div id="jump_wrapper">
+      <div id="jump_page">
+          <a class="source" href="api.py.html">api.py</a>
+          <a class="source" href="download_data.py.html">download_data.py</a>
+      </div>
+    </div>
+  </div>
+  <table cellspacing=0 cellpadding=0>
+  <thead>
+    <tr>
+      <th class=docs><h1>download_data.py</h1></th>
+      <th class=code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id='section-1'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-1">&#182;</a>
+        </div>
+        <p>Copyright 2013 Allen Institute for Brain Science
+Licensed under the Apache License, Version 2.0 (the &ldquo;License&rdquo;);
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at</p>
+
+<p>http://www.apache.org/licenses/LICENSE-2.0</p>
+
+<p>Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an &ldquo;AS IS&rdquo; BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
+    <tr id='section-2'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-2">&#182;</a>
+        </div>
+        <p>Download the spatial search lines emanating from the injection site and the 
+coordinates of grid voxels inside of the injection site mask.  Output all
+of this to a json file.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="kn">import</span> <span class="nn">api</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="n">DATA_SET_ID</span> <span class="o">=</span> <span class="mi">156394513</span>
+<span class="n">DENSITY_RANGE</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.04</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">]</span>
+<span class="n">INJECTION_MASK_THRESHOLD</span> <span class="o">=</span> <span class="mf">0.5</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-3'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-3">&#182;</a>
+        </div>
+        <p>Download the spatial search lines for a data set.  This is done by searching
+the density volume for that data set for voxels within a range of density values.
+A relatively low range is chosen by default to avoid fiber tracts.  Voxels in
+the fiber tract annotation mask are skipped for the same reason.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="k">def</span> <span class="nf">DownloadLines</span><span class="p">(</span><span class="n">dataSetId</span><span class="p">,</span> <span class="n">densityRange</span><span class="p">):</span>
+    <span class="k">print</span> <span class="s">&quot;downloading density volume&quot;</span>
+    <span class="n">densityHeader</span><span class="p">,</span> <span class="n">densityArr</span><span class="p">,</span> <span class="n">densityMeta</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">DownloadDataSetVolume</span><span class="p">(</span><span class="n">dataSetId</span><span class="p">,</span> <span class="s">&#39;density&#39;</span><span class="p">)</span>
+    <span class="n">densitySpacing</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">densityMeta</span><span class="p">[</span><span class="s">&#39;ElementSpacing&#39;</span><span class="p">])</span>
+
+    <span class="k">print</span> <span class="s">&quot;downloading fiber tract volume&quot;</span>
+    <span class="n">ftHeader</span><span class="p">,</span> <span class="n">ftArr</span><span class="p">,</span> <span class="n">ftMeta</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">DownloadFiberTractVolume</span><span class="p">()</span>
+    <span class="n">ftSpacing</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ftMeta</span><span class="p">[</span><span class="s">&#39;ElementSpacing&#39;</span><span class="p">])</span>
+
+    </pre></div>
+      </td>
+    </tr>
+    <tr id='section-4'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-4">&#182;</a>
+        </div>
+        <p>The fiber tract annotation volume has 25um spacing vs 100um for the density volume.
+Converting from the coordinates of one to the other requires a simple scale factor.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="n">ftScale</span> <span class="o">=</span> <span class="n">densitySpacing</span> <span class="o">/</span> <span class="n">ftSpacing</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>  
+    <span class="n">ftDims</span> <span class="o">=</span> <span class="n">ftArr</span><span class="o">.</span><span class="n">shape</span>
+    </pre></div>
+      </td>
+    </tr>
+    <tr id='section-5'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-5">&#182;</a>
+        </div>
+        <p>Find the voxel indices with density within the specified density range.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">((</span><span class="n">densityArr</span> <span class="o">&gt;=</span> <span class="n">densityRange</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">densityArr</span> <span class="o">&lt;=</span> <span class="n">densityRange</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+    <span class="n">dataSetLines</span> <span class="o">=</span> <span class="p">[]</span>
+    
+    <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">:</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-6'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-6">&#182;</a>
+        </div>
+        <p>Convert the density volume voxel index to fiber tract volume coordinates.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>        <span class="n">ftIndex</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">index</span> <span class="o">*</span> <span class="n">ftScale</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">ftVal</span> <span class="o">=</span> <span class="n">ftArr</span><span class="p">[</span><span class="n">ftIndex</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ftIndex</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">ftIndex</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
+        <span class="k">except</span> <span class="ne">IndexError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">print</span> <span class="n">index</span><span class="p">,</span> <span class="s">&quot;outside fiber tract mask&quot;</span> 
+            <span class="k">continue</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-7'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-7">&#182;</a>
+        </div>
+        <p>If the mask value is 0, the voxel is not in a fiber tract.  Convert to micron
+units and download the path from the injection site to this voxel.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>        <span class="k">if</span> <span class="n">ftVal</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">coord</span> <span class="o">=</span> <span class="n">index</span> <span class="o">*</span> <span class="n">densitySpacing</span>
+            <span class="n">lines</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">DownloadTargetLines</span><span class="p">(</span><span class="n">coord</span><span class="p">,</span> <span class="n">dataSetId</span><span class="p">)</span>
+            <span class="n">dataSetLines</span> <span class="o">+=</span> <span class="n">lines</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span> <span class="n">index</span><span class="p">,</span> <span class="s">&quot;inside fiber tract mask&quot;</span>
+
+    <span class="k">return</span> <span class="n">dataSetLines</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-8'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-8">&#182;</a>
+        </div>
+        <p>Download the coordinates of voxels within the injection site.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="k">def</span> <span class="nf">DownloadInjectionCoordinates</span><span class="p">(</span><span class="n">dataSetId</span><span class="p">,</span> <span class="n">injectionMaskThreshold</span><span class="p">):</span>
+    <span class="k">print</span> <span class="s">&quot;downloading injection mask coordinates&quot;</span>
+    <span class="n">header</span><span class="p">,</span> <span class="n">arr</span><span class="p">,</span> <span class="n">meta</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">DownloadDataSetVolume</span><span class="p">(</span><span class="n">dataSetId</span><span class="p">,</span> <span class="s">&#39;injection&#39;</span><span class="p">)</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-9'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-9">&#182;</a>
+        </div>
+        <p>convert from 100um image coordinates to 1um coordinates.</p>
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="n">spacing</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">meta</span><span class="p">[</span><span class="s">&#39;ElementSpacing&#39;</span><span class="p">])</span>
+    <span class="n">coords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">arr</span> <span class="o">&gt;</span> <span class="n">injectionMaskThreshold</span><span class="p">)</span> <span class="o">*</span> <span class="n">spacing</span>
+    
+    <span class="k">return</span> <span class="n">coords</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">&quot;lines&quot;</span><span class="p">:</span> <span class="n">DownloadLines</span><span class="p">(</span><span class="n">DATA_SET_ID</span><span class="p">,</span> <span class="n">DENSITY_RANGE</span><span class="p">),</span>
+        <span class="s">&quot;injectionCoordinates&quot;</span><span class="p">:</span> <span class="n">DownloadInjectionCoordinates</span><span class="p">(</span><span class="n">DATA_SET_ID</span><span class="p">,</span> <span class="n">INJECTION_MASK_THRESHOLD</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;data.json&#39;</span><span class="p">,</span> <span class="s">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+    </pre></div>
+      </td>
+    </tr>
+  </table>
+</div>
+</body>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title> Computation Path Visualization </title>
+	<link rel="stylesheet" href="jquery-ui-1.10.0/css/ui-lightness/jquery-ui-1.10.0.custom.css">
+	<link rel="stylesheet" href="stylesheets/examples.css">
+	<script type="text/javascript" src="jquery-ui-1.10.0/js/jquery-1.9.0.js"></script>
+	<script type="text/javascript" src="jquery-ui-1.10.0/js/jquery-ui-1.10.0.custom.min.js"></script>
+    <script type="text/javascript" src="threejs/three.min.js"></script>
+    <script type="text/javascript" src="threejs/TrackballControls.js"></script>
+    <script type="text/javascript" src="threejs/Detector.js"></script>
+  <!--
+	    <link href="http://www.brain-map.org/external_assets/stylesheets/portal.css" media="screen" rel="stylesheet" type="text/css" />
+  <script src="http://www.brain-map.org/external_assets/javascripts/portal.js" type="text/javascript"></script>
+  -->
+
+  <!--
+	<script type="text/javascript">
+	  var _pImagePath = "http://www.brain-map.org/external_assets/portal_only/images/";   // location of plugin image assets (must end with a "/")
+var _pSupressBrowserFlashWarning = true;
+      var _pTabId = "pAPI";  // selects a particular tab
+      var _pMoreProjectsId = "pMoreProjects"; // specifies the particular More Projects tab to use
+      var _pImagePath = 'http://www.brain-map.org/assets//images/';   // location of plugin image assets (must end with a '/")
+
+      var self = this;
+      jQuery(function () {
+          _pPortalOnLoad();
+      });
+	</script>
+  -->
+
+  </head>
+  <style>
+	#chart {
+	background: black;
+	}
+
+	.loading {
+	color: white;
+	text-align: center;
+	top: 50%;
+	position: absolute;
+	width: 100%;
+	}
+  </style>
+  <body>
+	<!--
+  <script src="http://www.brain-map.org/external_assets/javascripts/portalHeader.js" type="text/javascript"></script>
+  -->
+	<h1> Computational Path Visualization </h1>
+
+	<div id="errorDialog" title="API Query Error"></div>
+
+	<div id="content">
+
+  <!-- <button onclick="noOrigin()">Compute</button> -->
+
+      <div id="chart"></div>
+
+    <!--
+	  <div id="description">
+		<p> The Connectivity Atlas API's <tt>mouse_connectivity_target_spatial</tt> service
+		  retrieves all of the experiments with signal density above .001 in a specific set of
+		  target coordinates.  The return contains a computationally derived path through the signal between the experiment's
+		  injection site and the target voxel. This example demonstrates how that query can be used
+		  on a <b>single</b> experiment to reconstruct the paths from the injection site to all voxels
+		  with within a given range of signal densities that are outside annotated fiber tracts.
+		  This is similar to the code used to visualize connectivity atlas experiments in the Brain Explorer©.</p>
+
+		<p> The data download script also retrieves the reference atlas voxels that have been marked as
+		  belonging to the experiment's injection site.  These are displayed as small yellow spheres.</p>
+
+		<p> The paths are displayed in 3D in the browser using the <a href="http://threejs.org">three.js</a>
+		  JavaScript library. This <a href="http://connectivity.brain-map.org/projection/experiment/156394513">experiment</a>
+		  has a primary injection site in the primary motor area.  You can see a similar visualization
+		  of this experiment in the Brain Explorer© <a href="aibe://connectivity.brain-map.org/grid_data/v1/visualize/156394513?atlas=0378">application</a>.</p>
+
+
+		<p> Note: your browser must support WebGL to view this demo. </p>
+    -->
+
+	  </div>
+
+	  <div id="documentation">
+    <!--
+    <h4> Documentation and Resources</h4>
+
+		<table>
+		  <tr>
+			<td><a href="doc/lines/download_data.py.html">download_data.py</a></td>
+			<td>A python script that downloads spatial search lines and injection site coordinates for an experiment.</td>
+		  </tr>
+		  <tr>
+			<td><a href="doc/lines/api.py.html">api.py</a></td>
+			<td>A python script containing API query methods.</td>
+		  </tr>
+		  <tr>
+			<td><a href="doc/lines/lines.js.html">lines.js</a></td>
+			<td>Three.js visualization documentation.</td>
+		  </tr>
+		  <tr>
+			<td><a href="lines/lines.tar.gz">lines.tar.gz</a></td>
+			<td>Archived source code.</td>
+		  </tr>
+		</table>
+		<script src="http://www.brain-map.org/external_assets/javascripts/portalFooter.js" type="text/javascript"></script>
+    -->
+	  </div>
+
+	</div>
+  </body>
+  <script type="text/javascript" src="lines.js"></script>
+</html>

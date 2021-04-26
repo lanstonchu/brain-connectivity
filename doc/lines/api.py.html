@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>api.py</title>
+  <link rel="stylesheet" href="../../stylesheets/docco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div id="jump_to">
+    Jump To &hellip;
+    <div id="jump_wrapper">
+      <div id="jump_page">
+          <a class="source" href="api.py.html">api.py</a>
+          <a class="source" href="download_data.py.html">download_data.py</a>
+      </div>
+    </div>
+  </div>
+  <table cellspacing=0 cellpadding=0>
+  <thead>
+    <tr>
+      <th class=docs><h1>api.py</h1></th>
+      <th class=code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id='section-1'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-1">&#182;</a>
+        </div>
+        <p>Copyright 2013 Allen Institute for Brain Science
+Licensed under the Apache License, Version 2.0 (the &ldquo;License&rdquo;);
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at</p>
+
+<p>http://www.apache.org/licenses/LICENSE-2.0</p>
+
+<p>Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an &ldquo;AS IS&rdquo; BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre></pre></div>
+      </td>
+    </tr>
+    <tr id='section-2'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-2">&#182;</a>
+        </div>
+        <p>This demonstrates how to load two raw expression energy volumes and their
+corresponding reference volume and compute the fold change between the 
+volumes on a per-structure basis.  </p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">urllib</span><span class="o">,</span> <span class="nn">urllib2</span>
+<span class="kn">import</span> <span class="nn">zipfile</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-3'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-3">&#182;</a>
+        </div>
+        <p>These are hard-coded paths to URLs for downloading expression volumes.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="n">API_SERVER</span> <span class="o">=</span> <span class="s">&quot;http://api.brain-map.org/&quot;</span>
+<span class="n">API_DATA_PATH</span> <span class="o">=</span> <span class="n">API_SERVER</span> <span class="o">+</span> <span class="s">&quot;api/v2/data/&quot;</span>
+<span class="n">FIBER_TRACT_VOLUME_URL</span> <span class="o">=</span> <span class="n">API_SERVER</span> <span class="o">+</span> <span class="s">&quot;api/v2/well_known_file_download/197646984&quot;</span>
+<span class="n">STRUCTURE_GRAPH_ID</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">REFERENCE_SPACE_ID</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="n">GRID_FMT</span> <span class="o">=</span> <span class="n">API_SERVER</span> <span class="o">+</span> <span class="s">&quot;grid_data/download/</span><span class="si">%d</span><span class="s">?include=</span><span class="si">%s</span><span class="s">&quot;</span>
+<span class="n">LINES_FMT</span> <span class="o">=</span> <span class="s">&quot;http://api.brain-map.org/api/v2/data/query.json?criteria=service::mouse_connectivity_target_spatial[seed_point$eq</span><span class="si">%d</span><span class="s">,</span><span class="si">%d</span><span class="s">,</span><span class="si">%d</span><span class="s">][section_data_set$eq</span><span class="si">%d</span><span class="s">]&quot;</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-4'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-4">&#182;</a>
+        </div>
+        <p>Download the fiber tract volume.  The zip file contains annotationFiber.mhd/raw, which
+will be unzipped and returned as a 3D numpy array.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="k">def</span> <span class="nf">DownloadFiberTractVolume</span><span class="p">():</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">API_SERVER</span> <span class="o">+</span> <span class="s">&quot;/api/v2/well_known_file_download/197646984&quot;</span>
+    <span class="k">return</span> <span class="n">DownloadVolume</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s">&#39;annotationFiber&#39;</span><span class="p">)</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-5'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-5">&#182;</a>
+        </div>
+        <p>Download a grid file from the URL above by substituting in the data set id 
+argument.  Grid files are .zip files that will be downloaded to a 
+temporary location, where it can be unzipped into memory using the zipfile
+module.  The raw volume is converted into a array of floats with 
+dimensions as described in the header file.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="k">def</span> <span class="nf">DownloadDataSetVolume</span><span class="p">(</span><span class="n">dataSetId</span><span class="p">,</span> <span class="n">volume</span><span class="o">=</span><span class="s">&#39;density&#39;</span><span class="p">):</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">GRID_FMT</span> <span class="o">%</span> <span class="p">(</span><span class="n">dataSetId</span><span class="p">,</span> <span class="n">volume</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">DownloadVolume</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">volume</span><span class="p">)</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-6'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-6">&#182;</a>
+        </div>
+        <p>Download the path from the injection site of a data set to one target coordinate.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="k">def</span> <span class="nf">DownloadTargetLines</span><span class="p">(</span><span class="n">target_coordinate</span><span class="p">,</span> <span class="n">injection_data_set_id</span><span class="p">):</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">LINES_FMT</span> <span class="o">%</span> <span class="p">(</span><span class="n">target_coordinate</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">target_coordinate</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">target_coordinate</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">injection_data_set_id</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">connection</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">response_text</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response_text</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">response</span><span class="p">[</span><span class="s">&#39;success&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">response</span><span class="p">[</span><span class="s">&#39;msg&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+    <span class="k">except</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+    </pre></div>
+      </td>
+    </tr>
+    <tr id='section-7'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-7">&#182;</a>
+        </div>
+        <p>Download a volume file.  This is assumed to be a zip file containing a meta image 
+.mhd/.raw pair named &lsquo;volume.mhd/raw&rsquo;.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="k">def</span> <span class="nf">DownloadVolume</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">volume</span><span class="p">):</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-8'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-8">&#182;</a>
+        </div>
+        <p>download and unzip the file</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="n">fh</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+    <span class="n">zf</span> <span class="o">=</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">fh</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="n">header</span> <span class="o">=</span> <span class="n">zf</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">volume</span> <span class="o">+</span> <span class="s">&#39;.mhd&#39;</span><span class="p">)</span>
+    <span class="n">raw</span> <span class="o">=</span> <span class="n">zf</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">volume</span> <span class="o">+</span> <span class="s">&#39;.raw&#39;</span><span class="p">)</span>
+
+    <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-9'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-9">&#182;</a>
+        </div>
+        <p>parse the meta image header.  each line should be a &lsquo;key = value&rsquo; pair.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="n">metaLines</span> <span class="o">=</span> <span class="n">header</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+    <span class="n">metaInfo</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39; = &#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">metaLines</span> <span class="k">if</span> <span class="n">line</span><span class="p">)</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-10'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-10">&#182;</a>
+        </div>
+        <p>convert values to numeric types as appropriate</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">metaInfo</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s">&quot;^[\d\s]+$&quot;</span><span class="p">,</span><span class="n">v</span><span class="p">):</span>
+            <span class="n">nums</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">metaInfo</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">metaInfo</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-11'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-11">&#182;</a>
+        </div>
+        <p>reshape the array to the appropriate dimensions.  Note the use of the fortran column ordering.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="n">arr</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">metaInfo</span><span class="p">[</span><span class="s">&#39;DimSize&#39;</span><span class="p">],</span> <span class="n">order</span><span class="o">=</span><span class="s">&#39;F&#39;</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="p">(</span><span class="n">header</span><span class="p">,</span><span class="n">arr</span><span class="p">,</span><span class="n">metaInfo</span><span class="p">)</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-12'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-12">&#182;</a>
+        </div>
+        <p>Make a query to the API via a URL.</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="k">def</span> <span class="nf">QueryAPI</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+    <span class="n">start_row</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">num_rows</span> <span class="o">=</span> <span class="mi">2000</span>
+    <span class="n">total_rows</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">done</span> <span class="o">=</span> <span class="bp">False</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-13'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-13">&#182;</a>
+        </div>
+        <p>the ontology has to be downloaded in pages, since the API will not return
+more than 2000 rows at once.</p>
+
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>    <span class="k">while</span> <span class="ow">not</span> <span class="n">done</span><span class="p">:</span>
+        <span class="n">pagedUrl</span> <span class="o">=</span> <span class="n">url</span> <span class="o">+</span> <span class="s">&#39;&amp;start_row=</span><span class="si">%d</span><span class="s">&amp;num_rows=</span><span class="si">%d</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">start_row</span><span class="p">,</span><span class="n">num_rows</span><span class="p">)</span>
+
+        <span class="k">print</span> <span class="n">pagedUrl</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">pagedUrl</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+        <span class="n">rows</span> <span class="o">+=</span> <span class="n">response</span><span class="p">[</span><span class="s">&#39;msg&#39;</span><span class="p">]</span>
+        
+        <span class="k">if</span> <span class="n">total_rows</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">total_rows</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="s">&#39;total_rows&#39;</span><span class="p">])</span>
+
+        <span class="n">start_row</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="s">&#39;msg&#39;</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">start_row</span> <span class="o">&gt;=</span> <span class="n">total_rows</span><span class="p">:</span>
+            <span class="n">done</span> <span class="o">=</span> <span class="bp">True</span>
+
+    <span class="k">return</span> <span class="n">rows</span></pre></div>
+      </td>
+    </tr>
+  </table>
+</div>
+</body>
