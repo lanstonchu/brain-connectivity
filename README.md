@@ -4,7 +4,8 @@
 
 **Procedures:**
 
-- 1. run "sph_histogram.py" to download data.json (or to read "htmlResponseSample.html" instead of using api for quick debugging purpose)
+- run `sph_histogram.py` to download data.json
+- alternative, hide/unhide some codes in `sph_histogram.py` to read `htmlResponseSample_XXXX_YYYY_ZZZZ.html` instead of using api for quick debugging purpose)
 - Visit localhost:80 to visualize data.json
 
  ---------------------------
