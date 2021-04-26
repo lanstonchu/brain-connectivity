@@ -6,13 +6,14 @@
 
 - run `sph_histogram.py` to download data.json
 - alternative, hide/unhide some codes in `sph_histogram.py` to read `htmlResponseSample_XXXX_YYYY_ZZZZ.html` instead of using api for quick debugging purpose)
-- Visit localhost:80 to visualize data.json
+- Visit `localhost:80` to visualize data.json
 
  ---------------------------
  **Main Folder Structure:**
 
-     /CS642
-     ├──/*   <-   directories; WebGL Library
+     /
+     ├──/paper and slide   <-   paper and slide of the project
+     ├──/*   <-   other directories for WebGL Library
      |
      ├──/sph_histogram.py   <-   main Python file
      ├──/lines.js   <-   main WebGL file
