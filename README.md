@@ -8,6 +8,11 @@
 - alternative, hide/unhide some codes in `sph_histogram.py` to read `htmlResponseSample_XXXX_YYYY_ZZZZ.html` instead of using api for quick debugging purpose)
 - Visit `localhost:80` to visualize data.json
 
+----------------------------
+
+![Image 1 - Location of LGd][1]
+![Image 2 - Result at LGd][2]
+
  ---------------------------
  **Main Folder Structure:**
 
@@ -28,3 +33,6 @@
      ├──Spherical Histogram.nb   <-   3D Spherical Histogram Visualization
      |          
      └──README.md
+
+[1]: https://github.com/lanstonchu/brain-connectivity/blob/main/images/mouse_brain.png
+[2]: https://github.com/lanstonchu/brain-connectivity/blob/main/images/lines_LGd.gif
