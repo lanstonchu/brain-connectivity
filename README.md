@@ -14,7 +14,7 @@
 
 **Presentation:**
 
-[![Alt text](https://github.com/lanstonchu/brain-connectivity/blob/main/images/presentation_screenshot.png)](https://www.youtube.com/watch?v=tDp00Rhi7mE)
+[![Alt text][13]][14]
 
 **Gallery:**
 
@@ -68,3 +68,5 @@ MO1 | ![Image 5 - Result at MO1][5]  | ![Image 6 - Location of MO1][6]
 [10]: https://github.com/lanstonchu/brain-connectivity/raw/main/paper%20and%20slide/Spherical%20Histogram%20Approximation%20for%20Maximum%20Flow%20of%20Brain%20Connectivity%20-%20Lanston%20Hau%20Man%20Chu.pptx
 [11]: https://github.com/lanstonchu/brain-connectivity/
 [12]: https://github.com/lanstonchu/brain-connectivity/blob/main/images/field_relationship_small.png
+[13]: https://github.com/lanstonchu/brain-connectivity/blob/main/images/presentation_screenshot.png
+[14]: https://www.youtube.com/watch?v=tDp00Rhi7mE
