@@ -1,12 +1,14 @@
 # Spherical Histogram Approximation for Maximum Flow of Brain Connectivity
 
- ---------------------------
+---------------------------
 
-**Procedures:**
+**Materials:**
 
-- run `sph_histogram.py` to download data.json
-- alternative, hide/unhide some codes in `sph_histogram.py` to read `htmlResponseSample_XXXX_YYYY_ZZZZ.html` instead of using api for quick debugging purpose)
-- Visit `localhost:80` to visualize data.json
+- [Presentation Video][7]
+- [Interactive Visualization][8]
+- [Paper][9]
+- [Slide][10]
+- [Source Code][11]
 
 ----------------------------
 
@@ -15,6 +17,14 @@ Destination   | Spherical Histogram Result | Location in brain
 LGd | ![Image 1 - Result at LGd][1]  | ![Image 2 - Location of LGd][2]
 IG  | ![Image 3 - Result at IG][3]   | ![Image 4 - Location of IG][4]
 MO1 | ![Image 5 - Result at MO1][5]  | ![Image 6 - Location of MO1][6]
+
+---------------------------
+
+**Procedures:**
+
+- run `sph_histogram.py` to download data.json
+- alternative, hide/unhide some codes in `sph_histogram.py` to read `htmlResponseSample_XXXX_YYYY_ZZZZ.html` instead of using api for quick debugging purpose)
+- Visit `localhost:80` to visualize data.json
 
  ---------------------------
  **Main Folder Structure:**
@@ -43,3 +53,8 @@ MO1 | ![Image 5 - Result at MO1][5]  | ![Image 6 - Location of MO1][6]
 [4]: https://github.com/lanstonchu/brain-connectivity/blob/main/images/Coronal_Sagittal_IG.PNG
 [5]: https://github.com/lanstonchu/brain-connectivity/blob/main/images/lines_MO1.gif
 [6]: https://github.com/lanstonchu/brain-connectivity/blob/main/images/Coronal_Sagittal_MO1.PNG
+[7]: https://youtu.be/tDp00Rhi7mE
+[8]: https://lanstonchu.github.io/gallery/brain_connectivity/
+[9]: https://github.com/lanstonchu/brain-connectivity/raw/main/paper%20and%20slide/Spherical%20Histogram%20Approximation%20for%20Maximum%20Flow%20of%20Brain%20Connectivity%20-%20Lanston%20Hau%20Man%20Chu.docx
+[10]: https://github.com/lanstonchu/brain-connectivity/raw/main/paper%20and%20slide/Spherical%20Histogram%20Approximation%20for%20Maximum%20Flow%20of%20Brain%20Connectivity%20-%20Lanston%20Hau%20Man%20Chu.pptx
+[11]: https://github.com/lanstonchu/brain-connectivity/
