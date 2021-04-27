@@ -24,6 +24,7 @@ LGd | ![Image 1 - Result at LGd][1]  | ![Image 2 - Location of LGd][2]
 IG  | ![Image 3 - Result at IG][3]   | ![Image 4 - Location of IG][4]
 MO1 | ![Image 5 - Result at MO1][5]  | ![Image 6 - Location of MO1][6]
 
+![Image 12 - Hypothetical relationship among the 3 fields][12]
 ---------------------------
 
 **Procedures:**
@@ -64,3 +65,4 @@ MO1 | ![Image 5 - Result at MO1][5]  | ![Image 6 - Location of MO1][6]
 [9]: https://github.com/lanstonchu/brain-connectivity/raw/main/paper%20and%20slide/Spherical%20Histogram%20Approximation%20for%20Maximum%20Flow%20of%20Brain%20Connectivity%20-%20Lanston%20Hau%20Man%20Chu.docx
 [10]: https://github.com/lanstonchu/brain-connectivity/raw/main/paper%20and%20slide/Spherical%20Histogram%20Approximation%20for%20Maximum%20Flow%20of%20Brain%20Connectivity%20-%20Lanston%20Hau%20Man%20Chu.pptx
 [11]: https://github.com/lanstonchu/brain-connectivity/
+[12]: https://github.com/lanstonchu/brain-connectivity/blob/main/images/field_relationship_small.png
