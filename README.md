@@ -24,6 +24,8 @@ LGd | ![Image 1 - Result at LGd][1]  | ![Image 2 - Location of LGd][2]
 IG  | ![Image 3 - Result at IG][3]   | ![Image 4 - Location of IG][4]
 MO1 | ![Image 5 - Result at MO1][5]  | ![Image 6 - Location of MO1][6]
 
+**Hypothetical relationship among the 3 fields:**
+
 ![Image 12 - Hypothetical relationship among the 3 fields][12]
 ---------------------------
 
