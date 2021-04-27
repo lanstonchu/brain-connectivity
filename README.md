@@ -10,9 +10,11 @@
 
 ----------------------------
 
-Spherical Histogram Result at LGd  | Location of LGd
-------------- | -------------
-![Image 2 - Result at LGd][2]  | ![Image 1 - Location of LGd][1]
+Destination   | Spherical Histogram Result | Location in brain
+------------- | ------------- | -------------
+LGd | ![Image 1 - Result at LGd][1]  | ![Image 2 - Location of LGd][2]
+IG  | ![Image 3 - Result at IG][3]   | ![Image 4 - Location of IG][4]
+MO1 | ![Image 5 - Result at MO1][5]  | ![Image 6 - Location of MO1][6]
 
  ---------------------------
  **Main Folder Structure:**
@@ -35,5 +37,9 @@ Spherical Histogram Result at LGd  | Location of LGd
      |          
      └──README.md
 
-[1]: https://github.com/lanstonchu/brain-connectivity/blob/main/images/mouse_brain.png
-[2]: https://github.com/lanstonchu/brain-connectivity/blob/main/images/lines_LGd.gif
+[1]: https://github.com/lanstonchu/brain-connectivity/blob/main/images/lines_LGd.gif
+[2]: https://github.com/lanstonchu/brain-connectivity/blob/main/images/mouse_brain.png
+[3]: https://github.com/lanstonchu/brain-connectivity/blob/main/images/lines_IG.gif
+[4]: https://github.com/lanstonchu/brain-connectivity/blob/main/images/Coronal_Sagittal_IG.PNG
+[5]: https://github.com/lanstonchu/brain-connectivity/blob/main/images/lines_MO1.gif
+[6]: https://github.com/lanstonchu/brain-connectivity/blob/main/images/Coronal_Sagittal_MO1.PNG
