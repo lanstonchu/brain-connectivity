@@ -10,8 +10,9 @@
 
 ----------------------------
 
-![Image 1 - Location of LGd][1]
-![Image 2 - Result at LGd][2]
+Spherical Histogram Result at LGd  | Location of LGd
+------------- | -------------
+![Image 2 - Result at LGd][2]  | ![Image 1 - Location of LGd][1]
 
  ---------------------------
  **Main Folder Structure:**
