@@ -12,6 +12,12 @@
 
 ----------------------------
 
+**Presentation:**
+
+[![Alt text](https://github.com/lanstonchu/brain-connectivity/blob/main/images/presentation_screenshot.png)](https://www.youtube.com/watch?v=tDp00Rhi7mE)
+
+**Gallery:**
+
 Destination   | Spherical Histogram Result | Location in brain
 ------------- | ------------- | -------------
 LGd | ![Image 1 - Result at LGd][1]  | ![Image 2 - Location of LGd][2]
